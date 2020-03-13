@@ -34,7 +34,7 @@ public class Note {
     @Column(name = "CONTENT", nullable = false, length = 2048)
     private String content;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToOne(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER) //TODO: LAZY
     @JoinColumn(name = "AUTHOR_ID", nullable = false)
     private User author;
 }

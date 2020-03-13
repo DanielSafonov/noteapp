@@ -2,8 +2,6 @@ package com.safonov.demo.application.web.facade.impl;
 
 import com.safonov.demo.application.model.entity.Note;
 import com.safonov.demo.application.model.entity.User;
-import com.safonov.demo.application.model.repository.UserRepository;
-import com.safonov.demo.application.service.NoteService;
 import com.safonov.demo.application.service.impl.NoteServiceImpl;
 import com.safonov.demo.application.service.impl.UserServiceImpl;
 import com.safonov.demo.application.web.converter.NoteConverter;
@@ -14,7 +12,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.PersistenceUnit;
 import java.security.Principal;
 import java.util.Set;
 
@@ -33,15 +35,16 @@ public class NoteControllerFacadeImpl implements NoteControllerFacade {
      * @param noteDTO
      * @return ResponseDAO<NoteDTO>
      */
+    @Transactional
     @Override
     public ResponseDAO<NoteDTO> createNote(Principal principal, NoteDTO noteDTO) {
         try{
+            User noteAuthor = userService
+                    .getUserByID(new User().setUsername(principal.getName()), noteDTO.getAuthor().getId()); //TODO: костыль
             noteService.createNote(
                     new User().setUsername(principal.getName()),
                     NoteConverter.toEntity(noteDTO)
-                            .setAuthor(userService.getUserByID(
-                                    new User().setUsername(principal.getName()), noteDTO.getAuthor().getId())
-                            )
+                            .setAuthor(noteAuthor)
             );
             return ResponseDAO.buildSuccessResponse(noteDTO);
         } catch (Exception e){
@@ -126,7 +129,7 @@ public class NoteControllerFacadeImpl implements NoteControllerFacade {
     public ResponseDAO<Set<NoteDTO>> getAllNotesForUser(Principal principal, String page, String pageSize) {
         try{
             Set<Note> notes = noteService.getAllNotesForUser(
-                    new User().setUsername(principal.getName()),
+                    userService.getUserByUsername(new User().setUsername(principal.getName()), principal.getName()),
                     PageRequest.of(Integer.parseInt(page), Integer.parseInt(pageSize))
             );
             return ResponseDAO.buildSuccessResponse(NoteConverter.toDTO(notes));

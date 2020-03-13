@@ -9,11 +9,14 @@ import com.safonov.demo.application.model.entity.User;
 import com.safonov.demo.application.model.repository.NoteRepository;
 import com.safonov.demo.application.model.repository.PermissionRepository;
 import com.safonov.demo.application.service.NoteService;
+import com.safonov.demo.application.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
@@ -25,6 +28,8 @@ public class NoteServiceImpl implements NoteService {
     private NoteRepository noteRepository;
     @Autowired
     private PermissionRepository permissionRepository;
+    @Autowired
+    private UserServiceImpl userService;
 
     @Override
     public Note createNote(User currentUser, Note note) {
@@ -38,7 +43,9 @@ public class NoteServiceImpl implements NoteService {
     @Override
     public void deleteNote(User currentUser, Long noteID) {
         try{
-            Boolean permissionGranted = checkPermission(currentUser, noteID, ActionEnum.WRITE);
+            currentUser.setId(userService.getUserByUsername(currentUser, currentUser.getUsername()).getId()); //TODO: КОСТЫЛЬ
+            Note note = noteRepository.findById(noteID).get();
+            Boolean permissionGranted = checkPermission(currentUser, note, ActionEnum.WRITE);
 
             if(!permissionGranted)
                 throw new PermissionException(
@@ -55,7 +62,7 @@ public class NoteServiceImpl implements NoteService {
     @Override
     public Note updateNote(User currentUser, Note note, Set<Permission> permissions) {
         try{
-            Boolean permissionGranted = checkPermission(currentUser, note.getId(), ActionEnum.WRITE);
+            Boolean permissionGranted = checkPermission(currentUser, note, ActionEnum.WRITE);
 
             if(!permissionGranted)
                 throw new PermissionException(
@@ -74,7 +81,9 @@ public class NoteServiceImpl implements NoteService {
     @Override
     public Note getNoteByID(User currentUser, Long noteID) {
         try{
-            Boolean permissionGranted = checkPermission(currentUser, noteID, ActionEnum.READ);
+            currentUser.setId(userService.getUserByUsername(currentUser, currentUser.getUsername()).getId()); //TODO: КОСТЫЛЬ
+            Note note = noteRepository.findById(noteID).get();
+            Boolean permissionGranted = checkPermission(currentUser, note, ActionEnum.READ);
 
             if(!permissionGranted)
                 throw new PermissionException(
@@ -100,15 +109,15 @@ public class NoteServiceImpl implements NoteService {
     /**
      * Проверить полномочия пользователя на выполнения действия в отношении записи
      * @param currentUser
-     * @param noteID
+     * @param note
      * @param actionEnum
      * @return
      */
-    private Boolean checkPermission(User currentUser, Long noteID, ActionEnum actionEnum){
-        if(noteID.equals(currentUser.getId()))
+    private Boolean checkPermission(User currentUser, Note note, ActionEnum actionEnum){
+        if(note.getAuthor().getId().equals(currentUser.getId()))
             return true;
 
-        Optional<Permission> permission = permissionRepository.findByNoteIdAndUserIdOrForAll(noteID, currentUser.getId());
+        Optional<Permission> permission = permissionRepository.findByNoteIdAndUserIdOrForAll(note.getId(), currentUser.getId());
         if(permission.isEmpty())
             return false;
 

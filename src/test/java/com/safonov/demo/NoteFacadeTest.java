@@ -42,4 +42,23 @@ public class NoteFacadeTest extends GenericTest{
         System.out.println(result.toString());
         assert(result.getData().size() != 0);
     }
+
+    @Test
+    public void getByID(){
+        ResponseDAO<NoteDTO> result =
+                noteFacade.getNoteByID(getPrincipal(), "1");
+        System.out.println(result.toString());
+        assert(result.getData() != null);
+    }
+
+    @Test
+    public void delete(){
+        ResponseDAO result = noteFacade.deleteNote(getPrincipal(), new NoteDTO().setId(5L));
+        assert(result.getError() == null);
+    }
+
+    @Test
+    public void update(){
+        //TODO: update
+    }
 }

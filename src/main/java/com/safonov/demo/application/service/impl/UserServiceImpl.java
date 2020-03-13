@@ -56,6 +56,15 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public User getUserByUsername(User currentUser, String username) {
+        try{
+            return userRepository.findByUsername(username);
+        } catch (Exception e){
+            throw new UserException(e.getMessage(), currentUser.getUsername());
+        }
+    }
+
+    @Override
     public Set<User> getAllUsers(User currentUser) {
         try{
             return new HashSet<>(userRepository.findAll());
