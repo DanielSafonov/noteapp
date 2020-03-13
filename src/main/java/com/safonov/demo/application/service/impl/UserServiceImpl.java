@@ -1,35 +1,64 @@
 package com.safonov.demo.application.service.impl;
 
+import com.safonov.demo.application.common.exception.UserException;
 import com.safonov.demo.application.model.entity.User;
+import com.safonov.demo.application.model.repository.UserRepository;
 import com.safonov.demo.application.service.UserService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.HashSet;
 import java.util.Set;
 
 @Slf4j
 public class UserServiceImpl implements UserService {
+    @Autowired
+    private UserRepository userRepository;
+
+    //TODO: Проверка полномочий для работы с пользователями - Role Based Access Control
+
     @Override
-    public User createUser(User user) {
-        return null;
+    public User createUser(User currentUser, User user) {
+        try{
+            return userRepository.save(user);
+        } catch (Exception e){
+            throw new UserException(e.getMessage(), currentUser.getUsername());
+        }
     }
 
     @Override
-    public User deleteUser(User user) {
-        return null;
+    public void deleteUser(User currentUser, User user) {
+        try{
+            userRepository.delete(user);
+        } catch (Exception e){
+            throw new UserException(e.getMessage(), currentUser.getUsername());
+        }
     }
 
     @Override
-    public User updateUser(User user) {
-        return null;
+    public User updateUser(User currentUser, User user) {
+        try{
+            return userRepository.save(user);
+        } catch (Exception e){
+            throw new UserException(e.getMessage(), currentUser.getUsername());
+        }
     }
 
     @Override
-    public User getUserByID(Long id) {
-        return null;
+    public User getUserByID(User currentUser, Long id) {
+        try{
+            return userRepository.findById(id).get();
+        } catch (Exception e){
+            throw new UserException(e.getMessage(), currentUser.getUsername());
+        }
     }
 
     @Override
-    public Set<User> getAllUsers() {
-        return null;
+    public Set<User> getAllUsers(User currentUser) {
+        try{
+            return new HashSet<>(userRepository.findAll());
+        } catch (Exception e){
+            throw new UserException(e.getMessage(), currentUser.getUsername());
+        }
     }
 }

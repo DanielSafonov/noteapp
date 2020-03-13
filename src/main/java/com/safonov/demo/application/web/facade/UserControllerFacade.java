@@ -4,6 +4,7 @@ import com.safonov.demo.application.web.dto.ResponseDAO;
 import com.safonov.demo.application.web.dto.UserDTO;
 import org.springframework.stereotype.Component;
 
+import java.security.Principal;
 import java.util.Set;
 
 /**
@@ -13,27 +14,31 @@ import java.util.Set;
 public interface UserControllerFacade {
     /**
      * Создать пользователя
+     * @param principal
      * @param userDTO
      * @return UserDTO
      */
-    ResponseDAO<UserDTO> createUser(UserDTO userDTO);
+    ResponseDAO<UserDTO> createUser(Principal principal, UserDTO userDTO);
 
     /**
      * Удалить пользователя
+     * @param principal
      * @param userDTO
      */
-    ResponseDAO deleteUser(UserDTO userDTO);
+    ResponseDAO deleteUser(Principal principal, UserDTO userDTO);
 
     /**
      * Получить пользователя по идентификатору
+     * @param principal
      * @param userID
      * @return UserDTO
      */
-    ResponseDAO<UserDTO> getUserByID(String userID);
+    ResponseDAO<UserDTO> getUserByID(Principal principal, String userID);
 
     /**
      * Получить список всех пользователей
+     * @param principal
      * @return Set<UserDTO>
      */
-    ResponseDAO<Set<UserDTO>> getAllUsers();
+    ResponseDAO<Set<UserDTO>> getAllUsers(Principal principal);
 }

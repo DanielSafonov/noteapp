@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.security.Principal;
 import java.util.Set;
 
 /**
@@ -29,33 +30,36 @@ public class UserController {
     @PostMapping(value = "/create", consumes = MediaType.APPLICATION_JSON_VALUE,
                  produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseDAO<UserDTO> createUser(
+            Principal principal,
             @RequestBody UserDTO userDTO
     ) {
-        return userControllerFacade.createUser(userDTO);
+        return userControllerFacade.createUser(principal, userDTO);
     }
 
     @Loggable
     @DeleteMapping(value = "/delete", consumes = MediaType.APPLICATION_JSON_VALUE,
                    produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseDAO<UserDTO> deleteUser(
+    public ResponseDAO deleteUser(
+            Principal principal,
             @RequestBody UserDTO userDTO
     ) {
-        return userControllerFacade.deleteUser(userDTO);
+        return userControllerFacade.deleteUser(principal, userDTO);
     }
 
     @Loggable
     @GetMapping(value = "/get/{id}", consumes = MediaType.APPLICATION_JSON_VALUE,
                 produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseDAO<UserDTO> getUserByID(
+            Principal principal,
             @PathVariable(name = "id") String id
     ) {
-        return userControllerFacade.getUserByID(id);
+        return userControllerFacade.getUserByID(principal, id);
     }
 
     @Loggable
     @GetMapping(value = "/get/all", consumes = MediaType.APPLICATION_JSON_VALUE,
                 produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseDAO<Set<UserDTO>> getAllUsers() {
-        return userControllerFacade.getAllUsers();
+    public ResponseDAO<Set<UserDTO>> getAllUsers(Principal principal) {
+        return userControllerFacade.getAllUsers(principal);
     }
 }

@@ -10,9 +10,9 @@ import java.util.Set;
 
 @Service
 public interface NoteService {
-    Note createNote(User user, Note note);
-    void deleteNote(User user, Long noteID);
-    Note updateNote(User user, Note note, Set<Permission> permissions);
-    Note getNoteByID(User user, Long noteID);
-    Set<Note> getAllNotesForUser(User user, Pageable pageable);
+    Note createNote(User currentUser, Note note);
+    void deleteNote(User currentUser, Long noteID);
+    Note updateNote(User currentUser, Note note, Set<Permission> permissions);
+    Note getNoteByID(User currentUser, Long noteID);
+    Set<Note> getAllNotesForUser(User currentUser, Pageable pageable);
 }

@@ -24,87 +24,87 @@ public class NoteServiceImpl implements NoteService {
     private PermissionRepository permissionRepository;
 
     @Override
-    public Note createNote(User user, Note note) {
+    public Note createNote(User currentUser, Note note) {
         try{
             return noteRepository.save(note);
         } catch (Exception e){
-            throw new NoteException(e.getMessage(), user.getUsername());
+            throw new NoteException(e.getMessage(), currentUser.getUsername());
         }
     }
 
     @Override
-    public void deleteNote(User user, Long noteID) {
+    public void deleteNote(User currentUser, Long noteID) {
         try{
-            Boolean permissionGranted = checkPermission(user, noteID, ActionEnum.WRITE);
+            Boolean permissionGranted = checkPermission(currentUser, noteID, ActionEnum.WRITE);
 
             if(!permissionGranted)
                 throw new PermissionException(
-                        "Action not allowed! User " + user.getUsername()
+                        "Action not allowed! User " + currentUser.getUsername()
                         + " couldn't delete note with id " + noteID
                 );
 
             noteRepository.deleteById(noteID);
         } catch (Exception e){
-            throw new NoteException(e.getMessage(), user.getUsername());
+            throw new NoteException(e.getMessage(), currentUser.getUsername());
         }
     }
 
     @Override
-    public Note updateNote(User user, Note note, Set<Permission> permissions) {
+    public Note updateNote(User currentUser, Note note, Set<Permission> permissions) {
         try{
-            Boolean permissionGranted = checkPermission(user, note.getId(), ActionEnum.WRITE);
+            Boolean permissionGranted = checkPermission(currentUser, note.getId(), ActionEnum.WRITE);
 
             if(!permissionGranted)
                 throw new PermissionException(
-                        "Action not allowed! User " + user.getUsername()
+                        "Action not allowed! User " + currentUser.getUsername()
                         + " couldn't update note with id " + note.getId()
                 );
 
             noteRepository.save(note);
             //TODO: UPDATE PERMISSIONS - delete, update, create
         } catch (Exception e){
-            throw new NoteException(e.getMessage(), user.getUsername());
+            throw new NoteException(e.getMessage(), currentUser.getUsername());
         }
     }
 
     @Override
-    public Note getNoteByID(User user, Long noteID) {
+    public Note getNoteByID(User currentUser, Long noteID) {
         try{
-            Boolean permissionGranted = checkPermission(user, noteID, ActionEnum.READ);
+            Boolean permissionGranted = checkPermission(currentUser, noteID, ActionEnum.READ);
 
             if(!permissionGranted)
                 throw new PermissionException(
-                        "Action not allowed! User " + user.getUsername()
+                        "Action not allowed! User " + currentUser.getUsername()
                         + " couldn't view note with id " + noteID
                 );
 
             return noteRepository.findById(noteID).get();
         } catch (Exception e){
-            throw new NoteException(e.getMessage(), user.getUsername());
+            throw new NoteException(e.getMessage(), currentUser.getUsername());
         }
     }
 
     @Override
-    public Set<Note> getAllNotesForUser(User user, Pageable pageable) {
+    public Set<Note> getAllNotesForUser(User currentUser, Pageable pageable) {
         try{
-            return noteRepository.findAllForUser(user.getId(), pageable);
+            return noteRepository.findAllForUser(currentUser.getId(), pageable);
         } catch (Exception e){
-            throw new NoteException(e.getMessage(), user.getUsername());
+            throw new NoteException(e.getMessage(), currentUser.getUsername());
         }
     }
 
     /**
      * Проверить полномочия пользователя на выполнения действия в отношении записи
-     * @param user
+     * @param currentUser
      * @param noteID
      * @param actionEnum
      * @return
      */
-    private Boolean checkPermission(User user, Long noteID, ActionEnum actionEnum){
-        if(noteID.equals(user.getId()))
+    private Boolean checkPermission(User currentUser, Long noteID, ActionEnum actionEnum){
+        if(noteID.equals(currentUser.getId()))
             return true;
 
-        Optional<Permission> permission = permissionRepository.findByNoteIdAndUserIdOrForAll(noteID, user.getId());
+        Optional<Permission> permission = permissionRepository.findByNoteIdAndUserIdOrForAll(noteID, currentUser.getId());
         if(permission.isEmpty())
             return false;
 

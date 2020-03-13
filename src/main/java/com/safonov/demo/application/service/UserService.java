@@ -7,9 +7,9 @@ import java.util.Set;
 
 @Service
 public interface UserService {
-    User createUser(User user);
-    User deleteUser(User user);
-    User updateUser(User user);
-    User getUserByID(Long id);
-    Set<User> getAllUsers();
+    User createUser(User currentUser, User user);
+    void deleteUser(User currentUser, User user);
+    User updateUser(User currentUser, User user);
+    User getUserByID(User currentUser, Long id);
+    Set<User> getAllUsers(User currentUser);
 }
