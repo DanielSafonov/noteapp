@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.security.Principal;
+import java.util.Set;
 
 public class NoteFacadeTest extends GenericTest{
     @Autowired
@@ -32,5 +33,13 @@ public class NoteFacadeTest extends GenericTest{
         );
         System.out.println(result.toString());
         assert(result.getData() != null && result.getError() == null);
+    }
+
+    @Test
+    public void getAll(){
+        ResponseDAO<Set<NoteDTO>> result =
+                noteFacade.getAllNotesForUser(getPrincipal(), "0", "100");
+        System.out.println(result.toString());
+        assert(result.getData().size() != 0);
     }
 }

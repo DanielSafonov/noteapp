@@ -18,7 +18,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "USER", schema = Constants.DB_SCHEMA)
+@Table(name = "NOTE", schema = Constants.DB_SCHEMA)
 @Accessors(chain = true)
 @Data
 @EqualsAndHashCode(exclude = {"author"})

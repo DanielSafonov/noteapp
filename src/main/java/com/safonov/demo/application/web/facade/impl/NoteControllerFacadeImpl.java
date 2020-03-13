@@ -2,8 +2,10 @@ package com.safonov.demo.application.web.facade.impl;
 
 import com.safonov.demo.application.model.entity.Note;
 import com.safonov.demo.application.model.entity.User;
+import com.safonov.demo.application.model.repository.UserRepository;
 import com.safonov.demo.application.service.NoteService;
 import com.safonov.demo.application.service.impl.NoteServiceImpl;
+import com.safonov.demo.application.service.impl.UserServiceImpl;
 import com.safonov.demo.application.web.converter.NoteConverter;
 import com.safonov.demo.application.web.dto.NoteDTO;
 import com.safonov.demo.application.web.dto.ResponseDAO;
@@ -21,6 +23,8 @@ import java.util.Set;
 public class NoteControllerFacadeImpl implements NoteControllerFacade {
     @Autowired
     private NoteServiceImpl noteService;
+    @Autowired
+    private UserServiceImpl userService;
 
     /**
      * Создать запись
@@ -35,6 +39,9 @@ public class NoteControllerFacadeImpl implements NoteControllerFacade {
             noteService.createNote(
                     new User().setUsername(principal.getName()),
                     NoteConverter.toEntity(noteDTO)
+                            .setAuthor(userService.getUserByID(
+                                    new User().setUsername(principal.getName()), noteDTO.getAuthor().getId())
+                            )
             );
             return ResponseDAO.buildSuccessResponse(noteDTO);
         } catch (Exception e){

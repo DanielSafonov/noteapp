@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
@@ -90,7 +91,7 @@ public class NoteServiceImpl implements NoteService {
     @Override
     public Set<Note> getAllNotesForUser(User currentUser, Pageable pageable) {
         try{
-            return noteRepository.findAllForUser(currentUser.getId(), pageable);
+            return new HashSet<>(noteRepository.findAllForUser(currentUser.getId(), pageable).getContent());
         } catch (Exception e){
             throw new NoteException(e.getMessage(), currentUser.getUsername());
         }
