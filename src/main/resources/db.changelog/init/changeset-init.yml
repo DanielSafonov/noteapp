@@ -1,0 +1,9 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1
+      author: Safonov Daniil
+      comment: Init database
+      changes:
+        sqlFile:
+          path: sql
+          relativeToChangelogFile: true

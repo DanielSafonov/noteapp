@@ -1,0 +1,7 @@
+databaseChangeLog:
+  - property:
+      name: db_schema
+
+  - include:
+      file: init/changeset-init.yml
+      relativeToChangelogFile: true

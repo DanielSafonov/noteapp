@@ -1,0 +1,1 @@
+INSERT INTO ${db_schema}".USER VALUES (1, 'admin', 'password');
