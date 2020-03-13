@@ -4,6 +4,7 @@ import com.safonov.demo.application.common.aspects.logger.Loggable;
 import com.safonov.demo.application.web.dto.ResponseDAO;
 import com.safonov.demo.application.web.dto.UserDTO;
 import com.safonov.demo.application.web.facade.UserControllerFacade;
+import com.safonov.demo.application.web.facade.impl.UserControllerFacadeImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -24,7 +25,7 @@ import java.util.Set;
 @RestController
 public class UserController {
     @Autowired
-    private UserControllerFacade userControllerFacade;
+    private UserControllerFacadeImpl userControllerFacade;
 
     @Loggable
     @PostMapping(value = "/create", consumes = MediaType.APPLICATION_JSON_VALUE,

@@ -7,7 +7,6 @@ import org.springframework.stereotype.Component;
 import java.security.Principal;
 import java.util.Set;
 
-@Component
 public interface NoteControllerFacade {
     /**
      * Создать запись

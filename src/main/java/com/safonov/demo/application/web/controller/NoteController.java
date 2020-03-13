@@ -4,7 +4,7 @@ import com.safonov.demo.application.common.Constants;
 import com.safonov.demo.application.common.aspects.logger.Loggable;
 import com.safonov.demo.application.web.dto.NoteDTO;
 import com.safonov.demo.application.web.dto.ResponseDAO;
-import com.safonov.demo.application.web.facade.NoteControllerFacade;
+import com.safonov.demo.application.web.facade.impl.NoteControllerFacadeImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -27,7 +27,7 @@ import java.util.Set;
 @RestController
 public class NoteController {
     @Autowired
-    private NoteControllerFacade noteControllerFacade;
+    private NoteControllerFacadeImpl noteControllerFacade;
 
     @Loggable
     @PostMapping(value = "/create", consumes = MediaType.APPLICATION_JSON_VALUE,

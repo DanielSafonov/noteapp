@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.Set;
 
-@Service
 public interface NoteService {
     Note createNote(User currentUser, Note note);
     void deleteNote(User currentUser, Long noteID);

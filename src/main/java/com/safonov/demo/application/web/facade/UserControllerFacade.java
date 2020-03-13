@@ -10,7 +10,6 @@ import java.util.Set;
 /**
  * Бизнес-логика для UserController
  */
-@Component
 public interface UserControllerFacade {
     /**
      * Создать пользователя

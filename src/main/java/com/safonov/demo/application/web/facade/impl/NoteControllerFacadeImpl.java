@@ -3,6 +3,7 @@ package com.safonov.demo.application.web.facade.impl;
 import com.safonov.demo.application.model.entity.Note;
 import com.safonov.demo.application.model.entity.User;
 import com.safonov.demo.application.service.NoteService;
+import com.safonov.demo.application.service.impl.NoteServiceImpl;
 import com.safonov.demo.application.web.converter.NoteConverter;
 import com.safonov.demo.application.web.dto.NoteDTO;
 import com.safonov.demo.application.web.dto.ResponseDAO;
@@ -10,14 +11,16 @@ import com.safonov.demo.application.web.facade.NoteControllerFacade;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.stereotype.Component;
 
 import java.security.Principal;
 import java.util.Set;
 
 @Slf4j
+@Component
 public class NoteControllerFacadeImpl implements NoteControllerFacade {
     @Autowired
-    private NoteService noteService;
+    private NoteServiceImpl noteService;
 
     /**
      * Создать запись
@@ -74,7 +77,7 @@ public class NoteControllerFacadeImpl implements NoteControllerFacade {
             noteService.updateNote(
                     new User().setUsername(principal.getName()),
                     NoteConverter.toEntity(noteDTO),
-                    null //TODO:
+                    null//FIXME:
             );
             return ResponseDAO.buildSuccessResponse(noteDTO);
         } catch (Exception e){

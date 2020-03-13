@@ -5,7 +5,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.Set;
 
-@Service
 public interface UserService {
     User createUser(User currentUser, User user);
     void deleteUser(User currentUser, User user);

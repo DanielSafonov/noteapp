@@ -1,1 +1,1 @@
-INSERT INTO ${db_schema}".USER VALUES (1, 'admin', 'password');
+INSERT INTO ${db_schema}.USER VALUES (1, 'user', 'password');

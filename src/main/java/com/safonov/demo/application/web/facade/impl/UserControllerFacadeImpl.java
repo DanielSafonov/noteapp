@@ -2,20 +2,23 @@ package com.safonov.demo.application.web.facade.impl;
 
 import com.safonov.demo.application.model.entity.User;
 import com.safonov.demo.application.service.UserService;
+import com.safonov.demo.application.service.impl.UserServiceImpl;
 import com.safonov.demo.application.web.converter.UserConverter;
 import com.safonov.demo.application.web.dto.ResponseDAO;
 import com.safonov.demo.application.web.dto.UserDTO;
 import com.safonov.demo.application.web.facade.UserControllerFacade;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.security.Principal;
 import java.util.Set;
 
 @Slf4j
+@Component
 public class UserControllerFacadeImpl implements UserControllerFacade {
     @Autowired
-    private UserService userService;
+    private UserServiceImpl userService;
 
     /**
      * Создать пользователя

@@ -12,11 +12,13 @@ import com.safonov.demo.application.service.NoteService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 import java.util.Set;
 
 @Slf4j
+@Service
 public class NoteServiceImpl implements NoteService {
     @Autowired
     private NoteRepository noteRepository;
@@ -60,8 +62,9 @@ public class NoteServiceImpl implements NoteService {
                         + " couldn't update note with id " + note.getId()
                 );
 
-            noteRepository.save(note);
-            //TODO: UPDATE PERMISSIONS - delete, update, create
+            note = noteRepository.save(note);
+            //FIXME: UPDATE PERMISSIONS - delete, update, create
+            return note;
         } catch (Exception e){
             throw new NoteException(e.getMessage(), currentUser.getUsername());
         }

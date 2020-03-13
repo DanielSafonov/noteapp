@@ -6,11 +6,13 @@ import com.safonov.demo.application.model.repository.UserRepository;
 import com.safonov.demo.application.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
 import java.util.Set;
 
 @Slf4j
+@Service
 public class UserServiceImpl implements UserService {
     @Autowired
     private UserRepository userRepository;
