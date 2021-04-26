@@ -22,7 +22,7 @@
 		<liquibase.version>3.8.7</liquibase.version>
 		<slf4j-simple.version>1.6.4</slf4j-simple.version>
 		<slf4j-api.version>1.7.5</slf4j-api.version>
-		<apache.commons.version>2.5</apache.commons.version>
+		<apache.commons.version>2.7</apache.commons.version>
 	</properties>
 
 	<dependencies>
